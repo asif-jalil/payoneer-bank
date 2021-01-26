@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payoneer Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="login-area">
+        <h1 class="text-center mb-3">Welcome To Payoneer Bank</h1>
+        <div class="card shadow-lg border-0 p-3 mb-5 bg-white rounded">
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Login</label>
+              <input type="text" class="form-control" placeholder="name@example.com">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlTextarea1" class="form-label">Password</label>
+              <input id="password" type="password" class="form-control" placeholder="*********">
+            </div>
+            <div class="mb-3">
+              <button id="login-btn" class="btn btn-success">Enter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="transaction-area" style="display: none;">
+        <h1 class="text-center mb-5">Transaction Area</h1>
+        <div class="row gx-5 mb-5">
+          <div class="col-md-4">
+            <div class="card rounded shadow bg-primary bg-gradient text-white border-0">
+              <div class="card-body">
+                <h3>Deposit</h3>
+                <h4>$<span id="deposited-status">00</span></h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card rounded shadow bg-warning bg-gradient border-0">
+              <div class="card-body">
+                <h3>Withdraw</h3>
+                <h4>$<span id="withdraw-status">00</span></h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card rounded shadow bg-dark bg-gradient text-white border-0">
+              <div class="card-body">
+                <h3>Balance</h3>
+                <h4>$<span id="balance-status">1200</span></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row gx-5">
+          <div class="col-md-6">
+            <div class="card rounded border-0 shadow-lg">
+              <div class="card-body">
+                <h4 class="mb-3">Deposit</h4>
+                <input id="deposit-amount" type="text" class="form-control mb-4" placeholder="$ amount you want to deposit">
+                <button id="deposit-btn" class="btn btn-success">Deposit</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card rounded border-0 shadow-lg">
+              <div class="card-body">
+                <h4 class="mb-3">Withdraw</h4>
+                <input id="withdraw-amount" type="text" class="form-control mb-4" placeholder="$ amount you want to withdraw">
+                <button id="withdraw-btn" class="btn btn-success">Withdraw</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Login event handler
+      const loginBtn = document.getElementById('login-btn');
+      const password = document.getElementById('password');
+      enterClick(password, loginBtn);
+
+      loginBtn.addEventListener('click', function () {
+        const loginArea = document.getElementById('login-area');
+        loginArea.style.display = 'none';
+        const transactionArea = document.getElementById('transaction-area');
+        transactionArea.style.display = 'block';
+      })
+
+      // Deposit button event handler
+      const depositBtn = document.getElementById('deposit-btn');
+      const depositInput = document.getElementById('deposit-amount');
+      enterClick(depositInput, depositBtn);
+
+      depositBtn.addEventListener('click', function () {
+        const deposit = captureAmount('deposit-amount');
+        updateAmount('deposited-status', deposit);
+        updateAmount('balance-status', deposit)
+        document.getElementById('deposit-amount').value = "";
+      })
+
+      // Withdraw button event handler
+      const withdrawBtn = document.getElementById('withdraw-btn');
+      const withdrawInput = document.getElementById('withdraw-amount');
+      enterClick(withdrawInput, withdrawBtn);
+
+      withdrawBtn.addEventListener('click', function () {
+        const withdraw = captureAmount('withdraw-amount');
+        updateAmount('withdraw-status', withdraw);
+        updateAmount('balance-status', -1 * withdraw);
+        document.getElementById('withdraw-amount').value = "";
+      })
+
+      // Enter button event
+      function enterClick(inputField, inputBtn) {
+        inputField.addEventListener('keyup', function (e) {
+          if (e.keyCode === 13) {
+            inputBtn.click();
+          }
+        })
+      }
+
+      // Capture Amount from input field
+      function captureAmount(id) {
+        const currentAmount = document.getElementById(id).value;
+        const amountNum = parseFloat(currentAmount);
+        return amountNum;
+      }
+
+      // Update Amount on Span
+      function updateAmount(id, amount) {
+        const currentStatus = document.getElementById(id).innerText;
+        const statusNum = parseFloat(currentStatus);
+        const totalAmount = statusNum + amount;
+        if (isNaN(amount) === false) {
+          document.getElementById(id).innerText = totalAmount;
+        }
+      }
+
+    </script>
+  </body>
+
+</html>
